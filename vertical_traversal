@@ -1,0 +1,127 @@
+import java.util.*;
+class bst
+{
+  int data;
+  bst left=null;
+  bst right=null;
+}
+public class vertical
+{
+  public static bst root;
+  bst insert(bst root,int val)
+  {
+    if(root==null)
+    {
+      root=new bst();
+      root.data=val;
+      return root;
+    }
+    else
+    {
+      if(root.data<val)
+        root.right=insert(root.right,val);
+      else if(root.data>val)
+        root.left=insert(root.left,val); 
+    }
+    return root;
+  }
+  int max(int r1,int r2)
+  {
+    if(r1>r2)
+      return r1;
+    else 
+      return r2;
+  }
+  int maxleft(bst root,int ans)
+  {
+    if(root!=null)
+    { 
+      return max(maxleft(root.left,ans+1),maxleft(root.right,ans-1));
+    }
+    return ans;
+  }
+  int maxright(bst root,int ans){
+      if(root!=null)
+      {
+        return max(maxright(root.right,ans+1),maxright(root.left,ans-1));
+      }
+      return ans;
+    }  
+  void inorder1(bst root)
+  {
+    if(root!=null)
+    {
+      inorder1(root.left);
+      System.out.println(root.data);
+      inorder1(root.right);
+    }
+  }
+  void inorder(bst root)
+  {
+    int top=-1,m=-1;
+    bst stack[]=new bst[1000];
+    while(true)
+    {
+      if(root!=null)
+      {
+        top++;
+        stack[top]=root;
+        root=root.left; 
+       // System.out.println("inserted:"+root.data);
+      }
+      else
+      {
+        if(top==-1){
+          break;}
+        bst temp=stack[top];
+        top--;
+        System.out.print(temp.data+" ");
+        root=temp.right;
+      }
+    }
+  }
+  void verticaltrav(bst root,int tot,int cur){
+      if(root!=null){
+        if(tot==cur)
+        {
+          System.out.print(root.data+" ");
+        }        
+        verticaltrav(root.left,tot,cur-1);
+        verticaltrav(root.right,tot,cur+1);
+        }
+    }
+  public static void main(String args[])
+  {
+    Scanner sc=new Scanner(System.in);
+    vertical v=new vertical();
+    int n=-1;
+    do
+    {
+      System.out.println("\n1.insert\n2.inorder\n3.vertical\n4.exit");
+      n=sc.nextInt();
+      switch(n)
+      {
+        case 1:
+          {
+            System.out.println("\nenter the number");
+            int val=sc.nextInt();
+            root=v.insert(root,val);
+            break;
+          }
+        case 2:
+          {
+            v.inorder(root);
+            break;
+          }
+        case 3:{
+          int l=v.maxleft(root,-1);
+          int r=v.maxright(root,-1);
+          for(int i=-l;i<=r;i++){
+            v.verticaltrav(root,i,0);
+            System.out.println();
+            }
+          }
+      }
+    }while(n!=4);
+  }
+}
