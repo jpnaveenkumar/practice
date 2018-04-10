@@ -1,6 +1,232 @@
-class Main 
+import static java.lang.Double.max;
+import java.util.Scanner;
+class tree
 {
-  public static void main(String[] args) 
-  {
-  }
+    int data;
+    tree left;
+    tree right;
+} 
+public class bst 
+{
+    public static tree queue[]=new tree[10000];
+    public static int front=-1,rear=0;
+    int printlevel(tree trav,int lvl,int cur)
+    {
+        if(lvl==cur)
+        {
+            System.out.print(trav.data+" ");
+            return 0;
+        }
+        else if(cur<lvl)
+        {
+            if(trav.left!=null)
+            {
+                printlevel(trav.left,lvl,cur+1);
+            }
+            if(trav.right!=null)
+            {
+                printlevel(trav.right,lvl,cur+1);
+            }
+        }
+        return 0;
+    }
+    int max(int a,int b)
+    {
+        if(a>b)
+            return a;
+        else
+            return b;
+    }
+    int height(tree trav,int tot)
+    {
+        if(trav==null)
+            return tot;
+        else
+        {
+                int a=height(trav.left,tot+1);
+                int b=height(trav.right,tot+1);
+                return max(a,b);
+        }
+    }
+    void enqueue(tree node)
+    {
+        queue[rear]=new tree();
+        queue[rear]=node;
+        rear++;
+    }
+    tree dequeue()
+    {
+        front++;
+        return queue[front];
+    }
+    void levelordertrav()
+    {
+        while(front<(rear-1))
+        {
+            tree temp=dequeue();
+            System.out.print(temp.data+" ");
+            if(temp.left!=null)
+                enqueue(temp.left);
+            if(temp.right!=null)
+                enqueue(temp.right);
+        }
+    }
+    tree findmin(tree root)
+    {
+        if(root==null)
+        {
+            return null;
+        }
+        else
+        {
+            if(root.left==null)
+                return root;
+            else
+                return findmin(root.left);
+        }
+    }
+    
+    tree delete(tree root,int val)
+    {
+        if(root==null)
+        {
+            System.out.println("no element found");
+            return null;
+        }
+        else
+        {
+            if(root.data>val)
+            {
+                root.left=delete(root.left,val);
+            }
+            else if(root.data<val)
+            {
+                root.right=delete(root.right,val);
+            }
+            else
+            {
+                if(root.right!=null && root.left!=null)
+                {
+                    tree mini=findmin(root.right);
+                    root.data=mini.data;
+                    root.right=delete(root.right,mini.data);
+                }
+                else 
+                {
+                    tree child=null;
+                    if(root.right==null)
+                        child=root.left;
+                    if(root.left==null)
+                        child=root.right;
+                    return child;
+                }
+            }
+        }
+        return root;
+    }
+    tree insert(tree root,int val)
+    {
+        if(root==null)
+        {
+            root=new tree();
+            root.data=val;
+            root.left=root.right=null;
+        }
+        else
+        {
+            if(root.data<val)
+            {
+                root.right=insert(root.right,val);
+            }
+            else if(root.data>val)
+            {
+                root.left=insert(root.left,val);
+            }
+        }
+        return root;
+    }
+    public void disp(tree root)
+    {
+         if(root!=null)
+         {
+             disp(root.left);
+             System.out.println(root.data);
+             disp(root.right);
+             //System.out.println(root.right);
+         }
+    }
+    public static tree root;
+    public static void main(String args[])
+    {
+        root=null;
+        StringBuilder sb=new StringBuilder("naveen");
+        bst b=new bst();
+        while(true)
+        {
+            System.out.println("enter your choice");
+            System.out.println("1.insert\n2.display\n3.min\n4.delete\n5.levelordertraversal\n6.height\n7.line by line\n8.exit\n");
+            Scanner sc=new Scanner(System.in);
+            switch(sc.nextInt())
+            {
+                case 1:{
+                            System.out.println("enter the number:");
+                            int val=sc.nextInt();
+                            root=b.insert(root,val);
+                            break;
+                        }
+                case 2:
+                        {
+                            b.disp(root);
+                            break;
+                        }
+                case 3:
+                        {
+                            tree min=b.findmin(root);
+                            if(min==null)
+                            {
+                                System.out.println("empty tree");
+                            }
+                            else
+                            {
+                                System.out.println(min.data);
+                            }
+                            break;
+                        }
+                case 4:
+                        {
+                            System.out.println("enter the element:");
+                            int n=sc.nextInt();
+                            root=b.delete(root, n);
+                            break;
+                        }
+                case 5:
+                        {
+                            if(root!=null)
+                            {
+                            b.enqueue(root);
+                            b.levelordertrav();
+                            }
+                            else{
+                                System.out.println("no elements found");
+                            }
+                            break;
+                        }
+                case 6:
+                        {
+                            System.out.println("The height of tree:"+b.height(root,0));
+                            break;
+                        }
+                case 7:
+                        {
+                            int h=b.height(root,0);
+                            for(int i=0;i<h;i++)
+                            {
+                            b.printlevel(root,i, 0);
+                            System.out.println();
+                            }
+                            break;
+                        }
+        }
+    }
+}
 }
