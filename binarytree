@@ -1,0 +1,110 @@
+import java.util.*;
+class bst
+{
+  int data;
+  bst left=null;
+  bst right=null;
+}
+public class binarytree
+{
+  public static bst root;
+  boolean isbst(bst root,int low,int high)
+  {
+    if(root!=null)
+    {
+      boolean a=true,b=true;
+      if(root.data<low || root.data>high)
+      {
+        return false;
+      }
+      if(root.left!=null)
+      a=isbst(root.left,low,root.data);
+      if(root.right!=null)
+      b=isbst(root.right,root.data,high);
+      return (a&&b);
+    }
+    return true;
+  }
+  void inorder(bst root)
+  {
+    if(root!=null)
+    {
+      inorder(root.left);
+      System.out.println(root.data);
+      inorder(root.right);
+    }
+  }
+  bst insert(bst root,int val)
+  {
+    if(root==null)
+    {
+      root=new bst();
+      root.data=val;
+      return root;
+    }
+    else
+    {
+      bst newnode=new bst();
+      newnode.data=val;
+      bst queue[]=new bst[1000];
+      int f=0,r=0;
+      queue[r]=root;
+      r++;
+      while(f<r)
+      {
+        bst temp=queue[f];
+        f++;
+        if(temp.left==null)
+        {
+          temp.left=newnode;
+          return root;
+        }
+        else if(temp.right==null)
+        {
+          temp.right=newnode;
+          return root;
+        }
+        else
+        {
+          queue[r]=temp.left;
+          r++;
+          queue[r]=temp.right;
+          r++;
+        }
+      }
+    }
+    return root;
+  }
+  public static void main(String args[])
+  {
+     int i,j,k,n=-1;
+    binarytree bt=new binarytree();
+        do
+        {
+            System.out.println("enter your choice");
+            System.out.println("1.insert\n2.display\n3.check bst\n4.exit\n");
+            Scanner sc=new Scanner(System.in);
+            n=sc.nextInt();
+            switch(n)
+            {
+                case 1:{
+                            System.out.println("enter the number:");
+                            int val=sc.nextInt();
+                            root=bt.insert(root,val);
+                            break;
+                        }
+                case 2:{
+                            bt.inorder(root);
+                            break;
+                        }
+              case 3:{
+                          boolean ans=bt.isbst(root,Integer.MIN_VALUE,Integer.MAX_VALUE);
+                          if(ans)
+                            System.out.println("Binary search tree");
+                          else
+                            System.out.println("Not a Binary search tree");
+                     }
+            }
+        }while(n!=4);
+  }
+}
