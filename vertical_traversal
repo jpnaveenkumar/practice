@@ -8,6 +8,29 @@ class bst
 public class vertical
 {
   public static bst root;
+  ArrayList leafpath(bst root,ArrayList path)
+  {
+    if(root!=null)
+    {
+      if(root.left==null && root.right==null)
+      {
+        System.out.println(path);
+      }
+      if(root.left!=null)
+      {
+        ArrayList path1=new ArrayList(path);
+        path1.add(root.left.data);
+        leafpath(root.left,path1);
+      }
+      if(root.right!=null)
+      {
+        ArrayList path2=new ArrayList(path);
+        path2.add(root.right.data);
+        leafpath(root.right,path2);
+      }
+    }
+    return path;
+  }
   bst insert(bst root,int val)
   {
     if(root==null)
@@ -97,7 +120,7 @@ public class vertical
     int n=-1;
     do
     {
-      System.out.println("\n1.insert\n2.inorder\n3.vertical\n4.exit");
+      System.out.println("\n1.insert\n2.inorder\n3.vertical\n4.leafpath\n5.exit");
       n=sc.nextInt();
       switch(n)
       {
@@ -120,8 +143,18 @@ public class vertical
             v.verticaltrav(root,i,0);
             System.out.println();
             }
+          break;
           }
+        case 4:{
+                  if(root!=null)
+                  {
+                    ArrayList ar=new ArrayList();
+                    ar.add(root.data);
+                    v.leafpath(root,ar);
+                  }
+                  else{System.out.println("No elements found!!");}
+               }
       }
-    }while(n!=4);
+    }while(n!=5);
   }
 }
