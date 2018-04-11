@@ -1,0 +1,79 @@
+import java.util.*;
+class bst
+{
+  int data;
+  int sum=0;
+  bst left=null;
+  bst right=null;
+}
+public class treesum
+  {
+  public static bst root;
+ void sumtree(bst root){
+   if(root!=null){
+        if(root.left!=null){
+              sumtree(root.left);
+              root.sum+=root.left.data+root.left.sum;
+          }
+     if(root.right!=null){
+            sumtree(root.right);
+            root.sum+=root.right.data+root.right.sum;
+       }
+     }
+   }
+  void inorder(bst root){
+    if(root!=null){
+          inorder(root.left);
+          System.out.println(root.data+" "+root.sum);
+          inorder(root.right);
+      }
+    }
+ bst insert(bst root,int val)
+  {
+    if(root==null)
+    {
+      root=new bst();
+      root.data=val;
+      return root;
+    }
+    else
+    {
+      if(root.data<val)
+        root.right=insert(root.right,val);
+      else if(root.data>val)
+        root.left=insert(root.left,val); 
+    }
+    return root;
+  }
+  public static void main(String a[]) 
+     {
+
+    Scanner sc=new Scanner(System.in);
+    treesum v=new treesum();
+    int n=-1;
+    do
+    {
+      System.out.println("\n1.insert\n2.sumtree\n3.display\n4.exit\n");
+      n=sc.nextInt();
+      switch(n)
+      {
+        case 1:
+          {
+            System.out.println("enter no:");
+            int no=sc.nextInt();
+            root=v.insert(root,no);
+            break;
+            }
+        case 2:{
+          v.sumtree(root);
+          break;
+          }
+       case 3:{
+         v.inorder(root);
+         break;
+         }
+      }
+    }while(n!=4);
+// System.out.println("hii") ;
+    } 
+ }
