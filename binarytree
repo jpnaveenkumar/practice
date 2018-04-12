@@ -8,6 +8,44 @@ class bst
 public class binarytree
 {
   public static bst root;
+  boolean ismirror(bst root1,bst root2)
+  {
+    if(root1!=null && root2!=null)
+    {
+      if(root1.data!=root2.data)
+        return false;
+      boolean a,b;
+        a=ismirror(root1.left,root2.right);
+        b=ismirror(root1.right,root2.left);
+      return (a&&b);
+    }
+    else if(root1==null && root2==null)
+      return true;
+    else
+      return false;
+  }
+  bst lowans(bst root,int a,int b){
+      if(root!=null)
+        {
+          bst t1=null,t2=null;
+          if(root.data==a || root.data==b)
+            return root;
+          if(root.left!=null)
+            t1=lowans(root.left,a,b);
+          if(root.right!=null)
+            t2=lowans(root.right,a,b);
+          
+          if(t1!=null && t2!=null)
+            return root;
+          else if(t1!=null)
+            return t1;
+          else if(t2!=null)
+            return t2;
+          else
+            return null;
+        }
+        return null;
+    }
   boolean isbst(bst root,int low,int high)
   {
     if(root!=null)
@@ -82,7 +120,7 @@ public class binarytree
         do
         {
             System.out.println("enter your choice");
-            System.out.println("1.insert\n2.display\n3.check bst\n4.exit\n");
+            System.out.println("1.insert\n2.display\n3.check bst\n4.lowest ansector\n5.mirror images\n6.exit\n");
             Scanner sc=new Scanner(System.in);
             n=sc.nextInt();
             switch(n)
@@ -103,8 +141,26 @@ public class binarytree
                             System.out.println("Binary search tree");
                           else
                             System.out.println("Not a Binary search tree");
+                          break;
                      }
+              case 4:{
+                      bst ans=bt.lowans(root,6,3);
+                      if(ans!=null)
+                        System.out.println(ans.data);
+                      else
+                        System.out.println("not found");
+                      break;
+                      }
+              case 5:
+                    {
+                      boolean ans=bt.ismirror(root.left,root.right);
+                      if(ans)
+                        System.out.println("They are mirror images of each other");
+                      else
+                        System.out.println("They are not mirror images");
+                      break;
+                    }
             }
-        }while(n!=4);
+        }while(n!=6);
   }
 }
