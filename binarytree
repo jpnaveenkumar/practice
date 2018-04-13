@@ -5,9 +5,135 @@ class bst
   bst left=null;
   bst right=null;
 }
+class info
+{
+  int size;
+  boolean isbst;
+  int mini=0;
+  int maxi=0;
+}
 public class binarytree
 {
   public static bst root;
+  int max(int a,int b)
+  {
+    if(a>b)
+      return a;
+    else
+      return b;
+  }
+  public static int curmax=-1;
+  void topleftview(bst root,int tot)
+  {
+    if(root!=null)
+    {
+      int r=0;
+      if(tot>curmax)
+      {
+        r++;
+        curmax=tot;
+      }
+      topleftview(root.left,tot+1);
+      topleftview(root.right,tot-1);
+      if(r!=0)
+      {
+        System.out.println(root.data+" ");
+      }
+    }
+  }
+  void toprightview(bst root,int tot)
+  {
+    if(root!=null)
+    {
+      int r=0;
+      if(tot>curmax)
+      {
+        r++;
+        curmax=tot;
+      }
+      toprightview(root.right,tot+1);
+      toprightview(root.left,tot-1);
+      if(r!=0)
+        System.out.println(root.data+" ");
+    }
+  }
+  info maxbst(bst root)
+  {
+    if(root!=null)
+    {
+      if(root.left==null && root.right==null)
+      {
+        info det=new info();
+        det.size=1;
+        det.isbst=true;
+        det.mini=root.data;
+        det.maxi=root.data;
+        return det;
+      }
+      info a1=null;
+      info b1=null;
+      if(root.left!=null)
+        a1=maxbst(root.left);
+      if(root.right!=null)
+        b1=maxbst(root.right);
+      if(a1!=null && b1!=null)
+      {
+          if(a1.isbst==true && b1.isbst==true && a1.maxi<root.data && b1.mini>root.data)
+          {
+            info c1=new info();
+            c1.size=a1.size+b1.size+1;
+            c1.mini=a1.maxi;
+            c1.maxi=b1.mini;
+            c1.isbst=true;
+            return c1;
+          }
+          else
+          {
+            info c1=new info();
+            c1.size=max(a1.size,b1.size);
+            c1.isbst=false;
+            return c1;
+          }
+      }
+      else if(a1!=null)
+      {
+        info c1=new info();
+        if(a1.isbst==true)
+        {
+          c1.isbst=true;
+          c1.size=a1.size+1;
+          c1.mini=a1.maxi;
+          c1.maxi=root.data;
+          return c1;
+        }
+        else
+        {
+          c1.isbst=false;
+          c1.size=a1.size;
+          return c1;
+        }
+      }
+      else if(b1!=null)
+      {
+        info c1=new info();
+        if(b1.isbst==true)
+        {
+          c1.isbst=true;
+          c1.size=b1.size+1;
+          c1.mini=root.data;
+          c1.maxi=b1.mini;
+          return c1;
+        }
+        else
+        {
+          c1.isbst=false;
+          c1.size=b1.size;
+          return c1;
+        }
+      }
+    }
+    return null;
+  }
   boolean ismirror(bst root1,bst root2)
   {
     if(root1!=null && root2!=null)
@@ -120,7 +246,7 @@ public class binarytree
         do
         {
             System.out.println("enter your choice");
-            System.out.println("1.insert\n2.display\n3.check bst\n4.lowest ansector\n5.mirror images\n6.exit\n");
+            System.out.println("1.insert\n2.display\n3.check bst\n4.lowest ansector\n5.mirror images\n6.largest bst size\ntop view of tree\n8.exit\n");
             Scanner sc=new Scanner(System.in);
             n=sc.nextInt();
             switch(n)
@@ -160,7 +286,21 @@ public class binarytree
                         System.out.println("They are not mirror images");
                       break;
                     }
+              case 6:
+                  {
+                      info b=bt.maxbst(root);
+                      System.out.println("size="+b.size);
+                      break;
+                  }
+              case 7:
+                    {
+                        bt.topleftview(root,0);
+                        curmax=-1;
+                        bt.toprightview(root.right,0);
+                        break;
+                    }
+                
             }
-        }while(n!=6);
+        }while(n!=8);
   }
 }
